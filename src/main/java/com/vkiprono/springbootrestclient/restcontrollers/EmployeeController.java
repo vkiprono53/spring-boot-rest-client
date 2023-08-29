@@ -1,6 +1,5 @@
 package com.vkiprono.springbootrestclient.restcontrollers;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.vkiprono.springbootrestclient.dtos.EMPGETRESPONSE;
 import com.vkiprono.springbootrestclient.dtos.EmpGetAndDeleteRequestDTO;
 import com.vkiprono.springbootrestclient.dtos.EmpSaveRequestDTO;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("api/v1/employees")
 public class EmployeeController {
     private final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
@@ -32,7 +31,6 @@ public class EmployeeController {
         ResponseDTO response = new ResponseDTO();
 
         try {
-
             response =employeeServiceI.saveEmployee(empSaveRequestDTO);
 
         }

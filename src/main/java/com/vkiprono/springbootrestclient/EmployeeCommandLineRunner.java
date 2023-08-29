@@ -1,7 +1,9 @@
 package com.vkiprono.springbootrestclient;
 
 import com.vkiprono.springbootrestclient.dtos.*;
+import com.vkiprono.springbootrestclient.enums.Role;
 import com.vkiprono.springbootrestclient.restcontrollers.EmployeeController;
+import com.vkiprono.springbootrestclient.restcontrollers.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -10,18 +12,25 @@ import org.springframework.stereotype.Component;
 public class EmployeeCommandLineRunner implements CommandLineRunner {
     private final EmployeeController employeeController;
 
+    private final UserController userController;
+
     @Autowired
-    public EmployeeCommandLineRunner(EmployeeController employeeController) {
+    public EmployeeCommandLineRunner(EmployeeController employeeController, UserController userController) {
         this.employeeController = employeeController;
+        this.userController = userController;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("---Call Save Begin---");
+        System.out.println("---Call Delete Begin---");
+        deleteEmployeeByPNo();
+        System.out.println("---Call Delete End---");
+
+      /*  System.out.println("---Call Save Begin---");
         saveEmployee();
         System.out.println("---Call Save End---");
 
-        System.out.println("---Call get Begin---");
+         System.out.println("---Call get Begin---");
         getEmployeeByPNo();
         System.out.println("---Call get End---");
 
@@ -33,8 +42,16 @@ public class EmployeeCommandLineRunner implements CommandLineRunner {
         deleteEmployeeByPNo();
         System.out.println("---Call Delete End---");
 
+        System.out.println("---Call registerUser Begin---");
+        registerUser();
+        System.out.println("---Call registerUser End---");*/
 
-    }
+
+     /*   System.out.println("---Call authenticateUser Begin---");
+        authenticateUser();
+        System.out.println("---Call authenticateUser End---");*/
+
+   }
 
     //Save*/
     public  void saveEmployee() throws Exception {
@@ -43,16 +60,16 @@ public class EmployeeCommandLineRunner implements CommandLineRunner {
         EmpSaveRequestDTO empSaveRequestDTO = new EmpSaveRequestDTO();
         EmployeeDTO employeeDTO = new EmployeeDTO();
 
-        employeeDTO.setPNo("DEV001");
-        employeeDTO.setFirstName("Chloe");
-        employeeDTO.setLastName("Nah");
-        employeeDTO.setEmail("chloenah@gmail.com");
+        employeeDTO.setPNo("HRD001");
+        employeeDTO.setFirstName("Tanya");
+        employeeDTO.setLastName("Becky");
+        employeeDTO.setEmail("TanyaBecky@gmail.com");
         employeeDTO.setDepartmentId(1L);
 
         AddressDTO addressDTO = new AddressDTO();
-        addressDTO.setAddress("200, 200");
-        addressDTO.setPhone("222222");
-        addressDTO.setPostalCode("900300");
+        addressDTO.setAddress("405, 120");
+        addressDTO.setPhone("455");
+        addressDTO.setPostalCode("40900");
 
         empSaveRequestDTO.setEmployeeDTO(employeeDTO);
         empSaveRequestDTO.setAddressDTO(addressDTO);
@@ -76,15 +93,15 @@ public class EmployeeCommandLineRunner implements CommandLineRunner {
         EmployeeDTO employeeDTO = new EmployeeDTO();
 
         employeeDTO.setPNo("SYS001");
-        employeeDTO.setFirstName("Brany");
-        employeeDTO.setLastName("Lee111");
-        employeeDTO.setEmail("leebrany111@gmail.com");
+        employeeDTO.setFirstName("Bran");
+        employeeDTO.setLastName("branlee");
+        employeeDTO.setEmail("BranLee@gmail.com");
         employeeDTO.setDepartmentId(1L);
 
         AddressDTO addressDTO = new AddressDTO();
-        addressDTO.setAddress("5903");
-        addressDTO.setPhone("154");
-        addressDTO.setPostalCode("30900");
+        addressDTO.setAddress("4003");
+        addressDTO.setPhone("1545");
+        addressDTO.setPostalCode("3094400");
 
         empSaveRequestDTO.setEmployeeDTO(employeeDTO);
         empSaveRequestDTO.setAddressDTO(addressDTO);
@@ -120,13 +137,49 @@ public class EmployeeCommandLineRunner implements CommandLineRunner {
 
         EmpGetAndDeleteRequestDTO empGetAndDeleteRequestDTO = new EmpGetAndDeleteRequestDTO();
 
-        empGetAndDeleteRequestDTO.setPNo("SYS001");
+        empGetAndDeleteRequestDTO.setPNo("HRD001");
         ResponseDTO response = employeeController.deleteEmployeeByPNo(empGetAndDeleteRequestDTO);
         System.out.println("Code: " + response.getCode());
         System.out.println("Status: " + response.getStatus());
         System.out.println("Message: " + response.getMessage());
 
         System.out.println("=======END EmployeeCommandLineRunner.deleteEmployeeByPNo()=======");
+
+    }
+
+    //Register New User"
+    public void registerUser() throws Exception{
+
+        System.out.println("=======START EmployeeCommandLineRunner.registerUser()=======");
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setFirstName("Leon1");
+        registerUserRequest.setLastName("Coder1");
+        registerUserRequest.setEmail("coder1@gmail.com");
+        registerUserRequest.setPassword("code1235");
+        registerUserRequest.setRole(Role.ADMIN);
+
+        String response = userController.register(registerUserRequest);
+
+        System.out.println("RegisterUser response is::::::::" + response);
+
+        System.out.println("=======EXIT EmployeeCommandLineRunner.registerUser()=======");
+
+    }
+
+    //Authenticate new user
+    public void authenticateUser() throws Exception{
+
+        System.out.println("=======START EmployeeCommandLineRunner.authenticateUser()=======");
+
+        AuthenticateUserRequest userRequest = new AuthenticateUserRequest();
+        userRequest.setEmail("coder@gmail.com");
+        userRequest.setPassword("code123");
+
+        ResponseTokenDTO response = userController.authenticate(userRequest);
+
+        System.out.println("AuthenticateUser response is::::::::" + response.getToken());
+
+        System.out.println("=======EXIT EmployeeCommandLineRunner.authenticateUser()=======");
 
     }
 
